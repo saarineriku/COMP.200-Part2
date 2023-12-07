@@ -34,7 +34,7 @@ jobs:
       run: npm install
 
     - name: Unit tests
-      run: make test-coverage unit tests
+      run: make test-coverage
     - name: Coveralls Parallel
       uses: coverallsapp/github-action@v2
       with:
