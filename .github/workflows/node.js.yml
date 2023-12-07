@@ -17,6 +17,9 @@ jobs:
     strategy:
       matrix:
         node-version: [14.x]
+        test_number:
+          - 1
+          - 2
         # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
 
     steps:
@@ -26,6 +29,29 @@ jobs:
       with:
         node-version: ${{ matrix.node-version }}
         cache: 'npm'
+
+    - name: npm install
+      run: npm install
+
+    - name: Unit tests
+      run: make test-coverage unit tests
+    - name: Coveralls Parallel
+      uses: coverallsapp/github-action@v2
+      with:
+        flag-name: run-${{ join(matrix.*, '-') }}
+        parallel: true
+
     - run: npm ci
     - run: npm run build --if-present
     - run: npm test
+
+  finish:
+    needs: build
+    if: ${{ always() }}
+    runs-on: ubuntu-latest
+    steps:
+    - name: Coveralls Finished
+      uses: coverallsapp/github-action@v2
+      with:
+        parallel-finished: true
+        carryforward: "run-1,run-2"
