@@ -3,7 +3,7 @@ import isDate from "../src/isDate.js";
 
 describe("IsDate", () => {
   it("Date object test", () => {
-    expect(isDate("Asdasd@email.com")).to.equal(true);
+    expect(isDate(new Date)).to.equal(true);
   });
   it("Wrong object test (string)", () => {
     expect(isDate("5.12.2023")).to.equal(false);
